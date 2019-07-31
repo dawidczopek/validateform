@@ -28,3 +28,14 @@ div {
     background-color: #f2f2f2;
     padding: 20px;
 }
+
+input.error, textarea.error, select.error{
+    border: 1px solid red;
+}
+
+.errors{
+    background: red;
+    padding: 15px;
+    text-align: center;
+    list-style: none;
+}

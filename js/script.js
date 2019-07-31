@@ -2,6 +2,39 @@
    var form = document.querySelector("#myForm"),
        fields = form.querySelectorAll("[data-error]");
 
+   function isNotEmpty(field) {
+       return field.value !== "";
+   }
+
+   function isMin(field, min){
+       return field.value.length >= min;
+   }
+
+   function isEmail(field){
+       return field.value.indexOf("@") !== -1;
+   }
+
+   function displayErr(errors){
+       var ul = document.querySelector("ul.errors");
+
+       if(!ul){
+           ul = document.createElement("ul");
+
+           ul.classList.add("errors");
+       }
+
+       ul.innerHTML = "";
+       errors.forEach(function(error){
+          var li = document.createElement("li");
+
+          li.textContent = error;
+
+          ul.appendChild(li);
+       });
+
+       form.parentNode.insertBefore(ul, form);
+
+   }
 
    form.addEventListener("submit", function(e) {
        e.preventDefault();
@@ -9,29 +42,32 @@
        var errors = [];
        console.log(fields);
        for(var i = 0; i < fields.length; i++){
-            var field = fields[i];
+            var field = fields[i],
+                isValid = false;
 
             if(field.type === "text"){
-                if(field.value === ""){
-                    errors.push(field.dataset.error);
-                }
+                isValid = isNotEmpty(field);
             }else if(field.type === "email"){
-                if(field.value.indexOf("@") === -1){
-                    errors.push(field.dataset.error);
-                }
+                isValid = isEmail(field);
             }else if(field.type === "select-one"){
-                if(field.value === ""){
-                    errors.push(field.dataset.error);
-                }
+                isValid = isNotEmpty(field);
             }else if(field.type === "textarea"){
-                if(field.value.length < 3){
-                    errors.push(field.dataset.error);
-                }
+                isValid = isMin(field, 2 );
             }
-           console.log(field);
+
+            if(!isValid) {
+                field.classList.add("error");
+                errors.push(field.dataset.error);
+            } else{
+                field.classList.remove("error");
+            }
        }
 
-       console.log(errors);
+       if(errors.length){
+           displayErr(errors);
+       } else{
+           form.submit();
+       }
    }, false);
 
 })();
