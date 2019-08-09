@@ -40,7 +40,6 @@
        e.preventDefault();
 
        var errors = [];
-       console.log(fields);
        for(var i = 0; i < fields.length; i++){
             var field = fields[i],
                 isValid = false;
